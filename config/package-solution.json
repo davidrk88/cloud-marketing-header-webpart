@@ -1,0 +1,20 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/spfx-build/package-solution.schema.json",
+  "solution": {
+    "name": "Cloud Marketing Header",
+    "id": "02c6856f-6811-4cd3-b21c-349b74868d37",
+    "version": "1.1.1.0",
+    "includeClientSideAssets": true,
+    "isDomainIsolated": false,
+    "developer": {
+      "name": "iSoftStone NA",
+      "websiteUrl": "http://www.isoftstoneinc.com",
+      "privacyUrl": "",
+      "termsOfUseUrl": "",
+      "mpnId": ""
+    }
+  },
+  "paths": {
+    "zippedPackage": "solution/cloud-marketing-header-webpart.sppkg"
+  }
+}
