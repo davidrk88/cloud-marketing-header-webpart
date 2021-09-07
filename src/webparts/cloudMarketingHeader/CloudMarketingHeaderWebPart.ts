@@ -125,7 +125,7 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 
 		this.domElement.querySelector('#cloudMarketingHeaderWebpartMain').setAttribute("style", "background-image: linear-gradient(to right, " + gradColor + "), url('" + bgImgUrl + "');");
 		// console.log(this.properties.headerLinksConfig);
-		// console.log(this.properties.audienceTarget);
+		console.log(this.properties.audienceTargetsDesc);
 	}
 
 	protected onDispose(): void {

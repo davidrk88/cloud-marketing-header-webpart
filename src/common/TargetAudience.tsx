@@ -47,7 +47,11 @@ export default class TargetAudience extends React.Component<ITargetAudienceProps
                 // proms.push(_sv.isMember(self.props.audienceTargets, self.props.pageContext.legacyPageContext[`userId`], self.props.pageContext.site.absoluteUrl));            
                 // self.props.audienceTargets.split(',').map((item) => {
                 self.props.audienceTargets.map((item) => {
-                    proms.push(_sv.isMember(item, self.props.pageContext.legacyPageContext[`userId`], self.props.pageContext.site.absoluteUrl));
+                    if (typeof item === 'string') {
+                        proms.push(_sv.isMember(item, self.props.pageContext.legacyPageContext[`userId`], self.props.pageContext.site.absoluteUrl));
+                    } else {
+                        proms.push(_sv.isMember(item.fullName, self.props.pageContext.legacyPageContext[`userId`], self.props.pageContext.site.absoluteUrl));
+                    }
                 });
                 
                 Promise.race(
