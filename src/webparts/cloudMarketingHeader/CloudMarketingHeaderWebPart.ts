@@ -125,7 +125,7 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 
 		this.domElement.querySelector('#cloudMarketingHeaderWebpartMain').setAttribute("style", "background-image: linear-gradient(to right, " + gradColor + "), url('" + bgImgUrl + "');");
 		// console.log(this.properties.headerLinksConfig);
-		console.log(this.properties.audienceTargetsDesc);
+		// console.log(this.properties.audienceTargetsDesc);
 	}
 
 	protected onDispose(): void {
@@ -312,13 +312,11 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 														showtooltip: true,
 														key: itemId,
 														defaultSelectedUsers: item.audienceTargetsLinks,  
-														onChange: (items: any[]) => {  
-															console.log('Items:', items);
+														onChange: (items: any[]) => {
 															let tempTargets = [];
 															items.map((target) => {
 																tempTargets.push(target.secondaryText);
 															});
-															console.log('tempTargets:',tempTargets);
 															item.audienceTargetsLinks = tempTargets;
 															onUpdate(field.id, item.audienceTargetsLinks);
 														},

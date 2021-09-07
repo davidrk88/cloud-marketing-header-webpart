@@ -27,10 +27,11 @@ export default class TargetAudience extends React.Component<ITargetAudienceProps
         return (
             <div>
                 {/*{this.props.audienceTarget ? */}
-                {this.props.audienceTargets ? 
+                {/*this.props.audienceTargets ? 
                     (this.state.canView ? this.props.children : ``)
                     :this.props.children
-                }
+                */}
+                {this.state.canView ? this.props.children : ``}
             </div>);
     }
     public checkUserCanViewWebpart(): void {
@@ -47,22 +48,30 @@ export default class TargetAudience extends React.Component<ITargetAudienceProps
                 // proms.push(_sv.isMember(self.props.audienceTargets, self.props.pageContext.legacyPageContext[`userId`], self.props.pageContext.site.absoluteUrl));            
                 // self.props.audienceTargets.split(',').map((item) => {
                 self.props.audienceTargets.map((item) => {
+                    console.log('Audience Target Item = ', item);
                     if (typeof item === 'string') {
+                        console.log('Audience Target TYPE = ', typeof item);
                         proms.push(_sv.isMember(item, self.props.pageContext.legacyPageContext[`userId`], self.props.pageContext.site.absoluteUrl));
                     } else {
                         proms.push(_sv.isMember(item.fullName, self.props.pageContext.legacyPageContext[`userId`], self.props.pageContext.site.absoluteUrl));
                     }
                 });
-                
-                Promise.race(
-                  proms.map(p => {
-                    return p.catch(err => {
-                      errors.push(err);
-                      if (errors.length >= proms.length) throw errors;
-                      return Promise.race(null);
+                console.log('Proms = ', proms);
+
+                // Promise.race(
+                //   proms.map(p => {
+                //     return p.catch(err => {
+                //       errors.push(err);
+                //       if (errors.length >= proms.length) throw errors;
+                //       return Promise.race(null);
+                //     });
+                //   })).then(val => {
+                //     this.setState({ canView: true }); //atleast one promise resolved
+                // });
+                proms.map(p => {
+                    p.then((value) => { 
+                        this.setState({ canView: true });
                     });
-                  })).then(val => {
-                    this.setState({ canView: true }); //atleast one promise resolved
                 });
             } else {
                 this.setState({ canView: true });    
