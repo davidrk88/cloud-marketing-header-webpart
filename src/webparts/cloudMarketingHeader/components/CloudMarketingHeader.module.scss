@@ -1,5 +1,12 @@
 @import '~office-ui-fabric-react/dist/sass/References.scss';
 
+:global {
+	.ms-CustomFieldHost .ms-Label {
+		font-weight: 600;
+	}
+}
+
+
 .cloudMarketingHeader {
 	.container {
 		max-width: 700px;
@@ -44,6 +51,7 @@
 		width: 100%;
 		min-height: 280px;
 		background-position: right;
+		// background-position: 50px 50px;
 		background-size: cover;
 	}
 
@@ -69,33 +77,78 @@
 	.announcementBarBG { background-color: white; }
 
 	.confidentialBar {
-		min-height: 40px;
-		width: 100%;
-		margin-left: 5px;
-		padding-top: 3px;
-		padding-bottom: 3px;
+		font-family: "Segoe UI";
+		font-size: 11px;
+		// min-height: 40px;
+		// width: 100%;
+		// margin-left: 5px;
+		// padding-top: 3px;
+		// padding-bottom: 3px;
+		padding: 3px 5px 3px 5px;
 		text-align: left;
-		background-color: white;
-		@include ms-fontColor-black;
-	}
-
-	.confidentialBarHeader {
-		font-size: 16px;
-		@include ms-fontWeight-bold;
+		color: #333;
+		background-color: #ffffe9;
+		border: 1px solid #ffe166;
 	}
 
 	.confidentialBarContent {
-		font-size: 14px;
+		// float: left;
+		// display: inline-block;
+	}
+
+	.confidentialBarHeader {
+		@include ms-fontWeight-bold;
+	}
+
+	.confidentialBarDescription {
+	}
+
+	.confidentialBar a {
+		text-decoration: none;
 	}
 
 	.confidentialBarContentToggle {
-		font-size: 10px;
+		position: absolute;
+		top: 3px;
+		right: 5px;
+		// font-family: "sans-serif";
+		font-family: "Arial";
+		font-size: 13px;
+		// font-weight: 900;
+		// color: #ffe166;
+		color: #333;
+		cursor: pointer;
 	}
 
 	.confidentialBarIcon {
-		color: white;
-		background-color: black;
+		color: #333;
+		// background-color: black;
+		border: 1px solid #333;
 		border-radius: 50%;
+	}
+
+	.helpLink {
+		position: absolute;
+		max-height: 35px;
+		right: 15px;
+		padding: 8px;
+		color: #333;
+		background-color: white;
+		text-decoration: underline;
+		cursor: pointer;
+	}
+
+	.helpLinkPos1 {
+		top: 55px;
+	}
+
+	.helpLinkPos2 {
+		top: 15px;
+	}
+
+	.helpLinkInvert {
+		color: white;
+		background-color: #333;
 	}
 	
 
@@ -114,17 +167,19 @@
 	.bgColorPink { background-color: #E3008C; }
 	.bgColorCyan { background-color: #00B7C3; }
 
-	.bgColorDefault:hover { filter: brightness(75%); }
-	.bgColorWhite:hover { filter: brightness(75%); }
+	.bgColorDefault:hover { filter: brightness(85%); }
+	.bgColorWhite:hover { filter: brightness(85%); }
 	.bgColorBlack:hover { background-color: #303030; }
-	.bgColorRed:hover { filter: brightness(75%); }
-	.bgColorOrange:hover { filter: brightness(75%); }
-	.bgColorYellow:hover { filter: brightness(75%); }
-	.bgColorGreen:hover { filter: brightness(75%); }
-	.bgColorBlue:hover { filter: brightness(75%); }
-	.bgColorPurple:hover { filter: brightness(75%); }
-	.bgColorPink:hover { filter: brightness(75%); }
-	.bgColorCyan:hover { filter: brightness(75%); }
+	.bgColorRed:hover { filter: brightness(85%); }
+	.bgColorOrange:hover { filter: brightness(85%); }
+	.bgColorYellow:hover { filter: brightness(85%); }
+	.bgColorGreen:hover { filter: brightness(85%); }
+	.bgColorBlue:hover { filter: brightness(85%); }
+	.bgColorPurple:hover { filter: brightness(85%); }
+	.bgColorPink:hover { filter: brightness(85%); }
+	.bgColorCyan:hover { filter: brightness(85%); }
+
+	.btnLink:hover { filter: brightness(85%); }
 
 	.txtColorWhite { @include ms-fontColor-white; }
 	.txtColorBlack { color: black; }
@@ -156,6 +211,10 @@
 		background-color: #C3010135;
 		// background-color: #F46773;
 		color: #C30101; 
+	}
+
+	.btnContainer {
+		display: inline-block;
 	}
 
 	.button {

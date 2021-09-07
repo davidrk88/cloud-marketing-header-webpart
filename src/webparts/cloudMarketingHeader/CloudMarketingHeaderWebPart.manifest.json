@@ -24,9 +24,25 @@
     "properties": {
       "title": "Header WebPart Title",
       "description": "Enter new description here...",
-      "btncolor": "bgColorWhite",
+      "descriptionAT": "Targetted description here...",
       "linktxtcolor": "txtColorBlack",
-      "announcementtype": "colorInformational"
+      "textcolor": "#ffffff",
+      // "btncolor": "bgColorWhite",
+      "btncolor": "#ffffff",
+      "showconfidential": true,
+      "showannouncement": false,
+      "announcementtype": "colorInformational",
+      "showhelplink": false,
+      "helplinkinvert": true,
+      "helplinktext": "Do you need help?",
+      "headerLinksConfig": [
+        {
+          "linkFlag": true,
+          "linkOrder": "1",
+          "linkText": "First link",
+          "linkUrl": "https://microsoft.com"
+        }
+      ]
     }
   }]
 }

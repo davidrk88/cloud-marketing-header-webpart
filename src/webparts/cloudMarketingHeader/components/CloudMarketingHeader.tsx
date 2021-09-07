@@ -1,10 +1,17 @@
 import * as React from 'react';
 import styles from './CloudMarketingHeader.module.scss';
 import { ICloudMarketingHeaderProps } from './ICloudMarketingHeaderProps';
+import TargetAudience, {
+  ITargetAudienceState
+} from "../../../common/TargetAudience";
 import { escape } from '@microsoft/sp-lodash-subset';
 
-export default class CloudMarketingHeader extends React.Component<ICloudMarketingHeaderProps, { confidentialBarToggle: boolean }> {
+export interface ICloudMarketingAudienceTargetState extends ITargetAudienceState {
+	confidentialBarToggle?: boolean;
+}
 
+export default class CloudMarketingHeader extends React.Component<ICloudMarketingHeaderProps, ICloudMarketingAudienceTargetState> {
+	
 	public constructor(props: ICloudMarketingHeaderProps) {
 		super(props);
 
@@ -83,34 +90,37 @@ export default class CloudMarketingHeader extends React.Component<ICloudMarketin
 		const confidentialBar = () => {
 			return (
 				<div className={ styles.confidentialBar }>
-					<div className={ styles.confidentialBarHeader }>
-						<span className={ styles.confidentialBarIcon }>&nbsp;&nbsp;&#33;&nbsp;&nbsp;</span> <span>MICROSOFT CONFIDENTIAL - FOR INTERNAL USE ONLY</span>
+					<div>
+						<div className={ styles.confidentialBarHeader }>
+							<span className={ styles.confidentialBarIcon }>&nbsp;&nbsp;&#33;&nbsp;&nbsp;</span> <span>MICROSOFT CONFIDENTIAL - FOR INTERNAL USE ONLY</span>
+						</div>
+						<div>
+							<span>This tool and its content are intended for Microsoft internal audience only.  Information contained herein should not be shared with anyone who does not have a business need to know.  To ensure compliance, please review the</span>
+							&nbsp;<a href="https://microsoft.sharepoint.com/sites/CELAWeb-Compliance/SitePages/confidential-information.aspx" target="_blank" data-interception="off">confidential information policy</a>
+						</div>
 					</div>
-					{ this.state.confidentialBarToggle 
-						? 	<div className={ styles.confidentialBarContent }>
-								<span>This tool and its content are intended for Microsoft internal audience only.  Information contained herein should not be shared with anyone who does not have a business need to know.  To ensure compliance, please review the</span> <a href="https://microsoft.sharepoint.com/sites/CELAWeb-Compliance/SitePages/confidential-information.aspx" target="_blank">confidential information policy</a>
-							</div>
-						:	null 
-					}
-					<div className={ styles.confidentialBarContentToggle }>
-						<a href="#" onClick={ () => this.setState({ confidentialBarToggle: !this.state.confidentialBarToggle }) }>{ this.state.confidentialBarToggle ? `hide` : `show` }</a>
-					</div>
+					<div className={ styles.confidentialBarContentToggle } onClick={ () => this.setState({ confidentialBarToggle: false }) }>X</div>
 				</div>
 			);
 		};
 
 		const renderButtonLinks = () => {
-			let btnBGColor = this._getBGColorsClass(this.props.btncolor);
+			// let btnBGColor = this._getBGColorsClass(this.props.btncolor);
+			let btnBGColor = '';
 			let btntextColor = this._getTxtColorsClass(this.props.linktxtcolor);
 
 			if (this.props.headerLinksConfig !== undefined) {
-				this.props.headerLinksConfig.sort((a, b) => (a.linkOrder > b.linkOrder) ? 1 : (a.linkOrder === b.linkOrder) ? ((a.linkText > b.linkText) ? 1 : -1) : -1 );
+				// this.props.headerLinksConfig.sort((a, b) => (a.linkOrder > b.linkOrder) ? 1 : (a.linkOrder === b.linkOrder) ? ((a.linkText > b.linkText) ? 1 : -1) : -1 );
 				return (
-					<div>
+					<div id="wpCMHeader_btnlinks">
 						{this.props.headerLinksConfig.filter(arrLinks => arrLinks.linkFlag).map((btnLink) =>
-							<a key={btnLink.uniqueId} href={ btnLink.linkUrl } className={ `${styles.button} ${btnBGColor}` } target="_blank">
-								<span className={ `${styles.label} ${btntextColor}` }>{escape(btnLink.linkText)}</span>
-							</a>
+							<div className={ `${styles.btnContainer}` }>
+								<TargetAudience pageContext={ this.props.pageContext } audienceTargets={ btnLink.audienceTargetsLinks }>
+								<a key={btnLink.uniqueId} href={ btnLink.linkUrl } className={ `${styles.button} ${styles.btnLink} ${btnBGColor}` } style={{ backgroundColor: `${this.props.btncolor}` }} target="_blank" data-interception="off">
+									<span className={ `${styles.label} ${btntextColor}` }>{ btnLink.linkText }</span>
+								</a>
+								</TargetAudience>
+							</div>
 						)}
 					</div>
 				);
@@ -121,37 +131,59 @@ export default class CloudMarketingHeader extends React.Component<ICloudMarketin
 			}
 		};
 
+		const renderAnnouncementBar = () => {
+			let announcementLink;
+			let announcementType = this._getAnnouncementColorsClass(this.props.announcementtype);
+
+			if(this.props.showannouncelink) {
+				announcementLink = <a href={ this.props.announcementlink } target="_blank" data-interception="off">{ this.props.announcementlinktext }</a>;
+			}
+
+			return ( 
+				<div className={ styles.announcementBarBG }>
+					<div className={ `${styles.announcementBar} ${announcementType}` }>
+						{escape(this.props.announcementmsg)} {announcementLink}
+					</div>
+				</div> 
+			);
+		};
+
+		const renderHelpLink = () => {
+			let helpLinkColor = (this.props.helplinkinvert ? `${styles.helpLinkInvert}` : '');
+			let helpLinkPosition = (this.state.confidentialBarToggle ? `${styles.helpLinkPos1}` : `${styles.helpLinkPos2}`);
+
+			return (
+				<a href={ this.props.helplinkurl } target="_blank" data-interception="off" className={ `${styles.helpLink} ${helpLinkPosition} ${helpLinkColor}` }>
+					{ this.props.helplinktext }
+				</a>
+			);
+		};
+
 		const renderMainContent = () => {
-			let txtColor = this._getTxtColorsClass(this.props.textcolor);
+			// let txtColor = this._getTxtColorsClass(this.props.textcolor);
+			let txtColor = '';
 			return (
 				<div>
 					<div className={ styles.content }>
-						<div className={ `${styles.title} ${styles.textLeft} ${txtColor}` }>{escape(this.props.title)}</div>
-						<p className={ `${styles.description} ${styles.textLeft} ${txtColor}` }>{escape(this.props.description)}</p>
+						<div className={ `${styles.title} ${styles.textLeft} ${txtColor}` } style={{ color: `${this.props.textcolor}` }}>{ this.props.title }</div>
+						<p className={ `${styles.description} ${styles.textLeft} ${txtColor}` } style={{ color: `${this.props.textcolor}` }}>{ this.props.description }</p>
+						<TargetAudience pageContext={ this.props.pageContext } audienceTargets={ this.props.audienceTargetsDesc }>
+						<p className={ `${styles.description} ${styles.textLeft} ${txtColor}` } style={{ color: `${this.props.textcolor}` }}>{ this.props.descriptionat }</p>
+						</TargetAudience>
 						{ renderButtonLinks() }
 					</div>
 				</div>
 			);
 		};
 
-		const renderAnnouncementBar = () => {
-			let announcementBar;
-			let announcementType = this._getAnnouncementColorsClass(this.props.announcementtype);
-
-			if(this.props.showannouncement) {
-				announcementBar = <div className={ `${styles.announcementBar} ${announcementType}` }>{escape(this.props.announcementmsg)}</div>;
-			}
-
-			return ( <div className={ styles.announcementBarBG }>{ announcementBar }</div> );
-		};
-
 		return (
 			<div className={ styles.cloudMarketingHeader }>
-				{ confidentialBar() }
+				{(this.props.showconfidential && this.state.confidentialBarToggle ) ? confidentialBar() : null}
 				<div id="cloudMarketingHeaderWebpartMain" className={ styles.imgFullWidth }>
 					{ renderMainContent() }
+					{ this.props.showhelplink ? renderHelpLink() : null }
 				</div>
-				{ renderAnnouncementBar() }
+				{this.props.showannouncement ? renderAnnouncementBar() : null }
 			</div>
 		);
 	}
