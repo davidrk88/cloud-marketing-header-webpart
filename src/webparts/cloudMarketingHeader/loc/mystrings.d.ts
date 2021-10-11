@@ -1,13 +1,18 @@
 declare interface ICloudMarketingHeaderWebPartStrings {
 	PropertyPaneDescription: string;
 	BasicGroupName: string;
+	LinksPaneDescription: string;
 	LinksGroupName: string;
-	AdditionalGroupName: string;
+	AdditionalInfoDesc: string;
+	NotificationsGroupName: string;
+	CustomInfoGroupName: string;
+	CustomInfo2GroupName: string;
 	BGImgButtonLabel: string;
 	BGImgSelectLabel: string;
 	GradientColorFieldLabel: string;
 	TitleFieldLabel: string;
 	DescriptionFieldLabel: string;
+	DescriptionPickerLabel: string;
 	DescriptionATFieldLabel: string;
 	DescriptionATPickerLabel: string;
 	TextColorFieldLabel: string;
@@ -29,6 +34,9 @@ declare interface ICloudMarketingHeaderWebPartStrings {
 	HelpLinkTextPlaceholder: string;
 	HelpLinkURLLabel: string;
 	HelpLinkInvertLabel: string;
+	CustomInfoFieldLabel: string;
+	CustomInfoBGColorLabel: string;
+	CustomInfoTargetPickerLabel: string;
 	PropertyPaneLinksPage: string;
 	ButtonLinkTextLabel: string;
 	ButtonLinkUrlLabel: string;

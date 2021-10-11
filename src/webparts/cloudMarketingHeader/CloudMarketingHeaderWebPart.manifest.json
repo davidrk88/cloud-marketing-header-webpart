@@ -20,14 +20,14 @@
     "group": { "default": "Other" },
     "title": { "default": "CloudMarketing Header" },
     "description": { "default": "Full-width header webpart designed for the Cloud Marketing roadmap tool.  Has configurable background image, title, description, alert text (if desired), and a list of button links." },
-    "officeFabricIconFontName": "Page",
+    "officeFabricIconFontName": "Header",
     "properties": {
       "title": "Header WebPart Title",
       "description": "Enter new description here...",
       "descriptionAT": "Targetted description here...",
+      "gradientcolor": "bgColorBlack",
       "linktxtcolor": "txtColorBlack",
       "textcolor": "#ffffff",
-      // "btncolor": "bgColorWhite",
       "btncolor": "#ffffff",
       "showconfidential": true,
       "showannouncement": false,
@@ -38,11 +38,16 @@
       "headerLinksConfig": [
         {
           "linkFlag": true,
-          "linkOrder": "1",
           "linkText": "First link",
           "linkUrl": "https://microsoft.com"
         }
-      ]
+      ],
+      "showcustominfo": false,
+      "custominfocontent": "<span>This section of the web part is intended to allow for the custom formatting of an informational panel that can be audience targeted.</span> </br></br> <ol> <li>Default list item #1</li> <li>Default list item #2</li><li>Default list item #3</li> </ol>",
+      "custominfobgcolor": "#f3f2f1",
+      "showcustominfo2": false,
+      "custominfo2content": "<span>This section of the web part is intended to allow for the custom formatting of an informational panel that can be audience targeted.</span> </br></br> <ol> <li>Default list item #1</li> <li>Default list item #2</li><li>Default list item #3</li> </ol>",
+      "custominfo2bgcolor": "#f3f2f1"
     }
   }]
 }

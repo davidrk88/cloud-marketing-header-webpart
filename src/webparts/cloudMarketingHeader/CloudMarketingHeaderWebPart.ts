@@ -1,6 +1,6 @@
 import * as React from 'react';
 import * as ReactDom from 'react-dom';
-import { Version } from '@microsoft/sp-core-library';
+import { Version, Environment, EnvironmentType, DisplayMode } from '@microsoft/sp-core-library';
 import {
 	IPropertyPaneConfiguration,
 	PropertyPaneTextField,
@@ -30,6 +30,10 @@ import {
 	PeoplePicker, 
 	PrincipalType 
 } from '@pnp/spfx-controls-react/lib/controls/peoplepicker';
+import { 
+	FieldCollectionData, 
+	CustomCollectionFieldType as FieldCollectionCustomType 
+} from '@pnp/spfx-controls-react/lib/FieldCollectionData';
 import { sp } from "@pnp/sp";
 import { BaseClientSideWebPart } from '@microsoft/sp-webpart-base';
 
@@ -62,9 +66,20 @@ export interface ICloudMarketingHeaderWebPartProps {
 	helplinktext: string;
 	helplinkurl: string;
 	helplinkinvert: boolean;
+	showcustominfo: boolean;
+	custominfocontent: string;
+	custominfobgcolor: string;
+	audienceTargetsInfo: IPropertyFieldGroupOrPerson[];
+	custominfohandler: any;
+	showcustominfo2: boolean;
+	custominfo2content: string;
+	custominfo2bgcolor: string;
+	audienceTargetsInfo2: IPropertyFieldGroupOrPerson[];
+	custominfo2handler: any;
 	context: any;
 	headerLinksConfig: any[];
 	audienceTargetsDesc: IPropertyFieldGroupOrPerson[];
+	audienceTargetsDescAT: IPropertyFieldGroupOrPerson[];
 	audienceTargetsLinks: any[];
 }
 
@@ -81,6 +96,7 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 	public render(): void {
 		let bgImgUrl = "";
 		let gradColor;
+		let pageDisplayMode = this.displayMode == DisplayMode.Edit ? true : false;
 
 		const element: React.ReactElement<ICloudMarketingHeaderProps> = React.createElement(
 			CloudMarketingHeader,
@@ -104,9 +120,21 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 				helplinktext: this.properties.helplinktext,
 				helplinkurl: this.properties.helplinkurl,
 				helplinkinvert: this.properties.helplinkinvert,
+				showcustominfo: this.properties.showcustominfo,
+				custominfocontent: this.properties.custominfocontent,
+				custominfobgcolor: this.properties.custominfobgcolor,
+				audienceTargetsInfo: this.properties.audienceTargetsInfo,
+				custominfohandler: this.onCustomInfoChange,
+				showcustominfo2: this.properties.showcustominfo2,
+				custominfo2content: this.properties.custominfo2content,
+				custominfo2bgcolor: this.properties.custominfo2bgcolor,
+				audienceTargetsInfo2: this.properties.audienceTargetsInfo2,
+				custominfo2handler: this.onCustomInfo2Change,
 				context: this.context,
+				pagedisplaymode: pageDisplayMode,
 				headerLinksConfig: this.properties.headerLinksConfig,
 				audienceTargetsDesc: this.properties.audienceTargetsDesc,
+				audienceTargetsDescAT: this.properties.audienceTargetsDescAT,
 				audienceTargets: this.properties.audienceTargetsLinks,
 				pageContext: this.context.pageContext
 			}
@@ -124,8 +152,8 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 		ReactDom.render(element, this.domElement);
 
 		this.domElement.querySelector('#cloudMarketingHeaderWebpartMain').setAttribute("style", "background-image: linear-gradient(to right, " + gradColor + "), url('" + bgImgUrl + "');");
-		// console.log(this.properties.headerLinksConfig);
-		// console.log(this.properties.audienceTargetsDesc);
+		this.domElement.querySelector('#customInfoPanel').setAttribute("style", "background-color: " + this.properties.custominfobgcolor + ";");
+		this.domElement.querySelector('#customInfo2Panel').setAttribute("style", "background-color: " + this.properties.custominfo2bgcolor + ";");
 	}
 
 	protected onDispose(): void {
@@ -136,7 +164,18 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 		return Version.parse('1.0');
 	}
 
+	private onCustomInfoChange = (newText: string) => {
+		this.properties.custominfocontent = newText;
+		return newText;
+	}
+
+	private onCustomInfo2Change = (newText: string) => {
+		this.properties.custominfo2content = newText;
+		return newText;
+	}
+
 	protected getPropertyPaneConfiguration(): IPropertyPaneConfiguration {
+		// Dynamic Configuration Pane controls
 		let announcementMsgControl: any = [];
 		let announcementTypeControl: any = [];
 		let announceLinkToggleControl: any = [];
@@ -145,6 +184,10 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 		let helplinkTextControl: any = [];
 		let helplinkURLControl: any = [];
 		let helpLinkInvertControl: any = [];
+		let customInfoBGColorControl: any = [];
+		let customInfoAudienceControl: any = [];
+		let customInfo2BGColorControl: any = [];
+		let customInfo2AudienceControl: any = [];
 
 		if(this.properties.showannouncement) {
 			announcementMsgControl = PropertyPaneTextField('announcementmsg', {
@@ -202,17 +245,75 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 			});
 		}
 
+		if(this.properties.showcustominfo) {
+			customInfoBGColorControl = PropertyFieldColorPicker('custominfobgcolor', {
+				label: strings.CustomInfoBGColorLabel,
+				selectedColor: this.properties.custominfobgcolor,
+				onPropertyChange: this.onPropertyPaneFieldChanged,
+				properties: this.properties,
+				disabled: false,
+				// debounce: 1000,
+				isHidden: false,
+				alphaSliderHidden: false,
+				style: PropertyFieldColorPickerStyle.Inline,
+				iconName: 'Color',
+				key: 'infocolorFieldId'
+			});
+
+			customInfoAudienceControl = PropertyFieldPeoplePicker('audienceTargetsInfo', {
+				label: strings.CustomInfoTargetPickerLabel,
+				initialData: this.properties.audienceTargetsInfo,
+				allowDuplicate: false,
+				principalType: [PrincipalTypeProp.SharePoint],
+				onPropertyChange: this.onPropertyPaneFieldChanged,
+				context: this.context,
+				properties: this.properties,
+				onGetErrorMessage: null,
+				deferredValidationTime: 0,
+				key: 'infopeopleFieldId'
+			});
+		}
+
+		if(this.properties.showcustominfo2) {
+			customInfo2BGColorControl = PropertyFieldColorPicker('custominfo2bgcolor', {
+				label: strings.CustomInfoBGColorLabel,
+				selectedColor: this.properties.custominfo2bgcolor,
+				onPropertyChange: this.onPropertyPaneFieldChanged,
+				properties: this.properties,
+				disabled: false,
+				// debounce: 1000,
+				isHidden: false,
+				alphaSliderHidden: false,
+				style: PropertyFieldColorPickerStyle.Inline,
+				iconName: 'Color',
+				key: 'info2colorFieldId'
+			});
+
+			customInfo2AudienceControl = PropertyFieldPeoplePicker('audienceTargetsInfo2', {
+				label: strings.CustomInfoTargetPickerLabel,
+				initialData: this.properties.audienceTargetsInfo2,
+				allowDuplicate: false,
+				principalType: [PrincipalTypeProp.SharePoint],
+				onPropertyChange: this.onPropertyPaneFieldChanged,
+				context: this.context,
+				properties: this.properties,
+				onGetErrorMessage: null,
+				deferredValidationTime: 0,
+				key: 'info2peopleFieldId'
+			});
+		}
+
 		return {
 			pages: [
 				{
-					displayGroupsAsAccordion: true,
+					displayGroupsAsAccordion: false,
 					header: {
 						description: strings.PropertyPaneDescription
 					},
 					groups: [
 						{
 							groupName: strings.BasicGroupName,
-							isCollapsed: true,
+							isCollapsed: false,
 							groupFields: [
 								PropertyFieldFilePicker('filePicker', {
 									context: this.context,
@@ -244,8 +345,8 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 								PropertyPaneDropdown('gradientcolor', {
 									label: strings.GradientColorFieldLabel,
 									options: [
-										{ key: "bgColorWhite", text: "White" },
-										{ key: "bgColorBlack", text: "Black" }
+										{ key: "bgColorBlack", text: "Black" },
+										{ key: "bgColorWhite", text: "White" }
 									],
 									selectedKey: "bgColorBlack"
 								}),
@@ -256,12 +357,8 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 									label: strings.DescriptionFieldLabel,
 									multiline: true
 								}),
-								PropertyPaneTextField('descriptionAT', {
-									label: strings.DescriptionATFieldLabel,
-									multiline: true
-								}),
 								PropertyFieldPeoplePicker('audienceTargetsDesc', {
-									label: strings.DescriptionATPickerLabel,
+									label: strings.DescriptionPickerLabel,
 									initialData: this.properties.audienceTargetsDesc,
 									allowDuplicate: false,
 									principalType: [PrincipalTypeProp.SharePoint],
@@ -270,13 +367,37 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 									properties: this.properties,
 									onGetErrorMessage: null,
 									deferredValidationTime: 0,
-									key: 'peopleFieldId'
+									key: 'peopleDescFieldId'
 								}),
+								PropertyPaneTextField('descriptionAT', {
+									label: strings.DescriptionATFieldLabel,
+									multiline: true
+								}),
+								PropertyFieldPeoplePicker('audienceTargetsDescAT', {
+									label: strings.DescriptionATPickerLabel,
+									initialData: this.properties.audienceTargetsDescAT,
+									allowDuplicate: false,
+									principalType: [PrincipalTypeProp.SharePoint],
+									onPropertyChange: this.onPropertyPaneFieldChanged,
+									context: this.context,
+									properties: this.properties,
+									onGetErrorMessage: null,
+									deferredValidationTime: 0,
+									key: 'peopleFieldId'
+								})
 							]
-						},
+						}
+					]
+				},
+				{
+					displayGroupsAsAccordion: false,
+					header: {
+						description: strings.LinksPaneDescription
+					},
+					groups: [
 						{
 							groupName: strings.LinksGroupName,
-							isCollapsed: true,
+							isCollapsed: false,
 							groupFields: [
 								PropertyFieldCollectionData("headerLinksConfig", {
 									key: "headerLinksConfig",
@@ -327,16 +448,42 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 											}
 										},
 										{
+											id: "submenuBtns",
+											title: "Sub-menu Buttons",
+											type: CustomCollectionFieldType.custom,
+											onCustomRender: (field, value, onUpdate, item, itemId, onError) => {
+												return (  
+													React.createElement(FieldCollectionData, {
+														key: itemId,
+														// label: "Test Submenu Collect",
+														manageBtnLabel: "Configure",
+														// panelHeader: "Submenu Buttons",
+														panelHeader: item.linkText+' sub-menu link settings',
+														enableSorting: true,
+														value: item.submenuBtns,
+														onChanged: (values) => { 
+															console.log(values);
+															let tempValues = [];
+															values.map((btnLink) => {
+																tempValues.push(btnLink);
+															});
+															item.submenuBtns = tempValues;
+															onUpdate(field.id, item.submenuBtns);
+														},
+														fields: [
+															{id: "sublinktext", title: "Link Text", type: FieldCollectionCustomType.string, required: true},
+															{id: "sublinkurl", title: "URL", type: FieldCollectionCustomType.string}
+														]
+													})
+												);
+											}
+										},
+										{
 											id:"subMenuFlag",
 											title: "Link Sub-menu",
 											defaultValue: false,
 											type: CustomCollectionFieldType.boolean
 										},
-										// {
-										// 	id: "linkOrder",
-										// 	title: "Sort Order",
-										// 	type: CustomCollectionFieldType.number
-										// },
 										{
 											id: "linkFlag",
 											title: "Enable",
@@ -346,22 +493,6 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 									],
 									disabled: false
 								}),
-								// PropertyPaneDropdown('textcolor', {
-								// 	label: strings.TextColorFieldLabel,
-								// 	options: [
-								// 		{ key: "txtColorWhite", text: "White" },
-								// 		{ key: "txtColorBlack", text: "Black" },
-								// 		{ key: "txtColorRed", text: "Red" },
-								// 		{ key: "txtColorOrange", text: "Orange" },
-								// 		{ key: "txtColorYellow", text: "Yellow" },
-								// 		{ key: "txtColorGreen", text: "Green" },
-								// 		{ key: "txtColorBlue", text: "Blue" },
-								// 		{ key: "txtColorPurple", text: "Purple" },
-								// 		{ key: "txtColorPink", text: "Pink" },
-								// 		{ key: "txtColorCyan", text: "Cyan" }
-								// 	],
-								// 	selectedKey: "txtColorWhite"
-								// }),
 								PropertyFieldColorPicker('textcolor', {
 									label: strings.TextColorFieldLabel,
 									selectedColor: this.properties.textcolor,
@@ -371,27 +502,10 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 									// debounce: 1000,
 									isHidden: false,
 									alphaSliderHidden: false,
-									style: PropertyFieldColorPickerStyle.Full,
-									iconName: 'Precipitation',
+									style: PropertyFieldColorPickerStyle.Inline,
+									iconName: 'Color',
 									key: 'textcolorFieldId'
 								}),
-								// PropertyPaneDropdown('btncolor', {
-								// 	label: strings.BTNColorFieldLabel,
-								// 	options: [
-								// 		{ key: "bgColorDefault", text: "Theme default" },
-								// 		{ key: "bgColorWhite", text: "White" },
-								// 		{ key: "bgColorBlack", text: "Black" },
-								// 		{ key: "bgColorRed", text: "Red" },
-								// 		{ key: "bgColorOrange", text: "Orange" },
-								// 		{ key: "bgColorYellow", text: "Yellow" },
-								// 		{ key: "bgColorGreen", text: "Green" },
-								// 		{ key: "bgColorBlue", text: "Blue" },
-								// 		{ key: "bgColorPurple", text: "Purple" },
-								// 		{ key: "bgColorPink", text: "Pink" },
-								// 		{ key: "bgColorCyan", text: "Cyan" }
-								// 	],
-								// 	selectedKey: "bgColorWhite"
-								// })
 								PropertyFieldColorPicker('btncolor', {
 									label: strings.BTNColorFieldLabel,
 									selectedColor: this.properties.btncolor,
@@ -401,23 +515,31 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 									// debounce: 1000,
 									isHidden: false,
 									alphaSliderHidden: false,
-									style: PropertyFieldColorPickerStyle.Full,
-									iconName: 'Precipitation',
+									style: PropertyFieldColorPickerStyle.Inline,
+									iconName: 'Color',
 									key: 'btncolorFieldId'
 								}),
 								PropertyPaneDropdown('linktxtcolor', {
 									label: strings.LinkTxtColorFieldLabel,
 									options: [
-										{ key: "txtColorWhite", text: "White" },
-										{ key: "txtColorBlack", text: "Black" }
+										{ key: "txtColorBlack", text: "Black" },
+										{ key: "txtColorWhite", text: "White" }
 									],
 									selectedKey: "txtColorBlack"
 								})
 							]
-						},
+						}
+					]
+				},
+				{
+					displayGroupsAsAccordion: true,
+					header: {
+						description: strings.AdditionalInfoDesc
+					},
+					groups: [
 						{
-							groupName: strings.AdditionalGroupName,
-							isCollapsed: true,
+							groupName: strings.NotificationsGroupName,
+							isCollapsed: false,
 							groupFields: [
 								PropertyPaneToggle('showconfidential', {
 									label: strings.ConfidentialFieldLabel,
@@ -445,6 +567,34 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 								helplinkTextControl,
 								helplinkURLControl,
 								helpLinkInvertControl
+							]
+						},
+						{
+							groupName: strings.CustomInfoGroupName,
+							isCollapsed: false,
+							groupFields: [
+								PropertyPaneToggle('showcustominfo', {
+									label: strings.CustomInfoFieldLabel,
+									checked: false,
+									onText: "Enable",
+									offText: "Disable"
+								}),
+								customInfoBGColorControl,
+								customInfoAudienceControl
+							]
+						},
+						{
+							groupName: strings.CustomInfo2GroupName,
+							isCollapsed: false,
+							groupFields: [
+								PropertyPaneToggle('showcustominfo2', {
+									label: strings.CustomInfoFieldLabel,
+									checked: false,
+									onText: "Enable",
+									offText: "Disable"
+								}),
+								customInfo2BGColorControl,
+								customInfo2AudienceControl
 							]
 						}
 					]

@@ -69,7 +69,7 @@ export default class TargetAudience extends React.Component<ITargetAudienceProps
                 //     this.setState({ canView: true }); //atleast one promise resolved
                 // });
                 proms.map(p => {
-                    p.then((value) => { 
+                    p.then((value) => { // if promise resolves
                         this.setState({ canView: true });
                     });
                 });

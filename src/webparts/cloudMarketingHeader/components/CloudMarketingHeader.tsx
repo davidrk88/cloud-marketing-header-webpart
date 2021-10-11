@@ -4,6 +4,7 @@ import { ICloudMarketingHeaderProps } from './ICloudMarketingHeaderProps';
 import TargetAudience, {
   ITargetAudienceState
 } from "../../../common/TargetAudience";
+import { RichText } from "@pnp/spfx-controls-react/lib/RichText";
 import { escape } from '@microsoft/sp-lodash-subset';
 
 export interface ICloudMarketingAudienceTargetState extends ITargetAudienceState {
@@ -18,37 +19,10 @@ export default class CloudMarketingHeader extends React.Component<ICloudMarketin
 		this.state = { confidentialBarToggle: true };
 	}
 
-	private _getBGColorsClass(curColor) {
-		switch(curColor) {
-			case "bgColorWhite":
-				return `${styles.bgColorWhite}`;
-			case "bgColorBlack":
-				return `${styles.bgColorBlack}`;
-			case "bgColorRed":
-				return `${styles.bgColorRed}`;
-			case "bgColorOrange":
-				return `${styles.bgColorOrange}`;
-			case "bgColorYellow":
-				return `${styles.bgColorYellow}`;
-			case "bgColorGreen":
-				return `${styles.bgColorGreen}`;
-			case "bgColorBlue":
-				return `${styles.bgColorBlue}`;
-			case "bgColorPurple":
-				return `${styles.bgColorPurple}`;
-			case "bgColorPink":
-				return `${styles.bgColorPink}`;
-			case "bgColorCyan":
-				return `${styles.bgColorCyan}`;
-			default: //sets to site theme's dark color
-				return `${styles.bgColorDefault}`;
-		}
-	}
-
 	private _getTxtColorsClass(curColor) {
 		switch(curColor) {
-			case "txtColorBlack":
-				return `${styles.txtColorBlack}`;
+			case "txtColorWhite":
+				return `${styles.txtColorWhite}`;
 			case "txtColorRed":
 				return `${styles.txtColorRed}`;
 			case "txtColorOrange":
@@ -66,7 +40,7 @@ export default class CloudMarketingHeader extends React.Component<ICloudMarketin
 			case "txtColorCyan":
 				return `${styles.txtColorCyan}`;
 			default:
-				return `${styles.txtColorWhite}`;
+				return `${styles.txtColorBlack}`;
 		}
 	}
 
@@ -82,10 +56,6 @@ export default class CloudMarketingHeader extends React.Component<ICloudMarketin
 	}
 
 	public render(): React.ReactElement<ICloudMarketingHeaderProps> {
-		// const renderTextCol = () => {}
-		// console.log("Value from TEXT color dropdown: " + this.props.textcolor);
-		// console.log("Value from BACKGROUND color dropdown: " + this.props.bgcolor);
-		// console.log(this.props.headerLinksConfig);
 
 		const confidentialBar = () => {
 			return (
@@ -105,8 +75,6 @@ export default class CloudMarketingHeader extends React.Component<ICloudMarketin
 		};
 
 		const renderButtonLinks = () => {
-			// let btnBGColor = this._getBGColorsClass(this.props.btncolor);
-			let btnBGColor = '';
 			let btntextColor = this._getTxtColorsClass(this.props.linktxtcolor);
 
 			if (this.props.headerLinksConfig !== undefined) {
@@ -116,9 +84,23 @@ export default class CloudMarketingHeader extends React.Component<ICloudMarketin
 						{this.props.headerLinksConfig.filter(arrLinks => arrLinks.linkFlag).map((btnLink) =>
 							<div className={ `${styles.btnContainer}` }>
 								<TargetAudience pageContext={ this.props.pageContext } audienceTargets={ btnLink.audienceTargetsLinks }>
-								<a key={btnLink.uniqueId} href={ btnLink.linkUrl } className={ `${styles.button} ${styles.btnLink} ${btnBGColor}` } style={{ backgroundColor: `${this.props.btncolor}` }} target="_blank" data-interception="off">
-									<span className={ `${styles.label} ${btntextColor}` }>{ btnLink.linkText }</span>
-								</a>
+								{!btnLink.subMenuFlag ? 
+									<a key={btnLink.uniqueId} href={ btnLink.linkUrl } className={ `${styles.button} ${styles.btnLink}` } style={{ backgroundColor: `${this.props.btncolor}` }} target="_blank" data-interception="off">
+										<span className={ `${styles.label} ${btntextColor}` }>{ btnLink.linkText }</span>
+									</a> :
+									<div key={btnLink.uniqueId} className={ `${styles.button} ${styles.btnLinkMenu} ${styles.submenuContainer}` } style={{ backgroundColor: `${this.props.btncolor}` }}>
+										<span className={ `${styles.label} ${btntextColor} ${styles.submenuContainer}` }>{ btnLink.linkText }</span>
+										<ul className={ styles.btnSubmenu }>
+											{btnLink.submenuBtns.map((submenuLink) => 												
+												<li className={ `${styles.submenuItem}` } style={{ backgroundColor: `${this.props.btncolor}` }}>
+													<a href={ submenuLink.sublinkurl } target="_blank" data-interception="off">
+														<span className={ `${styles.itemLabel} ${btntextColor}` }>{ submenuLink.sublinktext }</span>
+													</a>
+												</li>
+											)}
+										</ul>
+									</div>
+								}
 								</TargetAudience>
 							</div>
 						)}
@@ -159,16 +141,36 @@ export default class CloudMarketingHeader extends React.Component<ICloudMarketin
 			);
 		};
 
+		const renderCustomInfo = () => {
+			return (
+				<TargetAudience pageContext={ this.props.pageContext } audienceTargets={ this.props.audienceTargetsInfo }>
+					<div className={ styles.customInfoRTE }>
+						<RichText value={this.props.custominfo2content} onChange={(text)=>this.props.custominfo2handler(text)} isEditMode={this.props.pagedisplaymode}/>
+					</div>
+				</TargetAudience>
+			);
+		};
+
+		const renderCustomInfo2 = () => {
+			return (
+				<TargetAudience pageContext={ this.props.pageContext } audienceTargets={ this.props.audienceTargetsInfo2 }>
+					<div className={ styles.customInfoRTE }>
+						<RichText value={this.props.custominfocontent} onChange={(text)=>this.props.custominfohandler(text)} isEditMode={this.props.pagedisplaymode}/>
+					</div>
+				</TargetAudience>
+			);
+		};
+
 		const renderMainContent = () => {
-			// let txtColor = this._getTxtColorsClass(this.props.textcolor);
-			let txtColor = '';
 			return (
 				<div>
 					<div className={ styles.content }>
-						<div className={ `${styles.title} ${styles.textLeft} ${txtColor}` } style={{ color: `${this.props.textcolor}` }}>{ this.props.title }</div>
-						<p className={ `${styles.description} ${styles.textLeft} ${txtColor}` } style={{ color: `${this.props.textcolor}` }}>{ this.props.description }</p>
+						<div className={ `${styles.title} ${styles.textLeft}` } style={{ color: `${this.props.textcolor}` }}>{ this.props.title }</div>
 						<TargetAudience pageContext={ this.props.pageContext } audienceTargets={ this.props.audienceTargetsDesc }>
-						<p className={ `${styles.description} ${styles.textLeft} ${txtColor}` } style={{ color: `${this.props.textcolor}` }}>{ this.props.descriptionat }</p>
+							<p className={ `${styles.description} ${styles.textLeft}` } style={{ color: `${this.props.textcolor}` }}>{ this.props.description }</p>
+						</TargetAudience>
+						<TargetAudience pageContext={ this.props.pageContext } audienceTargets={ this.props.audienceTargetsDescAT }>
+							<p className={ `${styles.description} ${styles.textLeft}` } style={{ color: `${this.props.textcolor}` }}>{ this.props.descriptionat }</p>
 						</TargetAudience>
 						{ renderButtonLinks() }
 					</div>
@@ -183,11 +185,16 @@ export default class CloudMarketingHeader extends React.Component<ICloudMarketin
 					{ renderMainContent() }
 					{ this.props.showhelplink ? renderHelpLink() : null }
 				</div>
-				{this.props.showannouncement ? renderAnnouncementBar() : null }
+				{ this.props.showannouncement ? renderAnnouncementBar() : null }
+				<div id="customInfoPanel">
+					{ this.props.showcustominfo ? renderCustomInfo() : null }
+				</div>
+				<div id="customInfo2Panel">
+					{ this.props.showcustominfo2 ? renderCustomInfo2() : null }
+				</div>
 			</div>
 		);
 	}
 
 }
-
 

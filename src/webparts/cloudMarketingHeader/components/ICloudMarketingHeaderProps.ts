@@ -20,7 +20,19 @@ export interface ICloudMarketingHeaderProps extends ITargetAudienceProps {
 	helplinktext: string;
 	helplinkurl: string;
 	helplinkinvert: boolean;
+	showcustominfo: boolean;
+	custominfocontent: string;
+	custominfobgcolor: string;
+	audienceTargetsInfo: any[];
+	custominfohandler: any;
+	showcustominfo2: boolean;
+	custominfo2content: string;
+	custominfo2bgcolor: string;
+	audienceTargetsInfo2: any[];
+	custominfo2handler: any;
 	context: any;
+	pagedisplaymode: boolean;
 	audienceTargetsDesc: any[];
+	audienceTargetsDescAT: any[];
 	headerLinksConfig: any[];
 }

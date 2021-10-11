@@ -51,7 +51,6 @@
 		width: 100%;
 		min-height: 280px;
 		background-position: right;
-		// background-position: 50px 50px;
 		background-size: cover;
 	}
 
@@ -79,21 +78,11 @@
 	.confidentialBar {
 		font-family: "Segoe UI";
 		font-size: 11px;
-		// min-height: 40px;
-		// width: 100%;
-		// margin-left: 5px;
-		// padding-top: 3px;
-		// padding-bottom: 3px;
 		padding: 3px 5px 3px 5px;
 		text-align: left;
 		color: #333;
 		background-color: #ffffe9;
 		border: 1px solid #ffe166;
-	}
-
-	.confidentialBarContent {
-		// float: left;
-		// display: inline-block;
 	}
 
 	.confidentialBarHeader {
@@ -111,18 +100,14 @@
 		position: absolute;
 		top: 3px;
 		right: 5px;
-		// font-family: "sans-serif";
 		font-family: "Arial";
 		font-size: 13px;
-		// font-weight: 900;
-		// color: #ffe166;
 		color: #333;
 		cursor: pointer;
 	}
 
 	.confidentialBarIcon {
 		color: #333;
-		// background-color: black;
 		border: 1px solid #333;
 		border-radius: 50%;
 	}
@@ -150,36 +135,40 @@
 		color: white;
 		background-color: #333;
 	}
+
+	.customInfoRTE {
+		max-width: 1236px;
+		margin: auto;
+		padding: 10px;
+	}
 	
 
 	/****************/
 	/*PRE-SET COLORS*/
 	/****************/
-	.bgColorDefault { background-color: $ms-color-themeDark; }
-	.bgColorWhite { background-color: white; }
-	.bgColorBlack { background-color: black; }
-	.bgColorRed { background-color: #E81123; }
-	.bgColorOrange { background-color: #F7630C; }
-	.bgColorYellow { background-color: #FFB900; }
-	.bgColorGreen { background-color: #107C10; }
-	.bgColorBlue { background-color: #0078D7; }
-	.bgColorPurple { background-color: #9A0089; }
-	.bgColorPink { background-color: #E3008C; }
-	.bgColorCyan { background-color: #00B7C3; }
+	// .bgColorDefault { background-color: $ms-color-themeDark; }
+	// .bgColorWhite { background-color: white; }
+	// .bgColorBlack { background-color: black; }
+	// .bgColorRed { background-color: #E81123; }
+	// .bgColorOrange { background-color: #F7630C; }
+	// .bgColorYellow { background-color: #FFB900; }
+	// .bgColorGreen { background-color: #107C10; }
+	// .bgColorBlue { background-color: #0078D7; }
+	// .bgColorPurple { background-color: #9A0089; }
+	// .bgColorPink { background-color: #E3008C; }
+	// .bgColorCyan { background-color: #00B7C3; }
 
-	.bgColorDefault:hover { filter: brightness(85%); }
-	.bgColorWhite:hover { filter: brightness(85%); }
-	.bgColorBlack:hover { background-color: #303030; }
-	.bgColorRed:hover { filter: brightness(85%); }
-	.bgColorOrange:hover { filter: brightness(85%); }
-	.bgColorYellow:hover { filter: brightness(85%); }
-	.bgColorGreen:hover { filter: brightness(85%); }
-	.bgColorBlue:hover { filter: brightness(85%); }
-	.bgColorPurple:hover { filter: brightness(85%); }
-	.bgColorPink:hover { filter: brightness(85%); }
-	.bgColorCyan:hover { filter: brightness(85%); }
-
-	.btnLink:hover { filter: brightness(85%); }
+	// .bgColorDefault:hover { filter: brightness(85%); }
+	// .bgColorWhite:hover { filter: brightness(85%); }
+	// .bgColorBlack:hover { background-color: #303030; }
+	// .bgColorRed:hover { filter: brightness(85%); }
+	// .bgColorOrange:hover { filter: brightness(85%); }
+	// .bgColorYellow:hover { filter: brightness(85%); }
+	// .bgColorGreen:hover { filter: brightness(85%); }
+	// .bgColorBlue:hover { filter: brightness(85%); }
+	// .bgColorPurple:hover { filter: brightness(85%); }
+	// .bgColorPink:hover { filter: brightness(85%); }
+	// .bgColorCyan:hover { filter: brightness(85%); }
 
 	.txtColorWhite { @include ms-fontColor-white; }
 	.txtColorBlack { color: black; }
@@ -193,23 +182,15 @@
 	.txtColorCyan { color: #00B7C3; }
 
 	.colorInformational { 
-		// background-color: #107C10;
-		background-color: #107C1035;
-		// background-color: #65EB65;
+		background-color: #107C101F;
 		color: #107C10; 
 	}
 	.colorWarning { 
-		// background-color: #FFB900;
-		// background-color: #FFB90035;
-		background-color: #E6A70035;
-		// background-color: #FFD462;
-		// color: #FFB900;
+		background-color: #E6A7001F;
 		color: #E6A700;
 	}
 	.colorCritical { 
-		// background-color: #E81123;
-		background-color: #C3010135;
-		// background-color: #F46773;
+		background-color: #C301011F;
 		color: #C30101; 
 	}
 
@@ -224,9 +205,7 @@
 
 		// Primary Button
 		width: 140px;
-		/*background-color: $ms-color-white;*/
 		border-color: $ms-color-themePrimary;
-		/*color: $ms-color-black;*/
 		margin-right: 15px;
 		margin-top: 10px;
 		border-radius: 5px;
@@ -253,6 +232,52 @@
 			vertical-align: middle;
 			text-align: center;
 		}
+	}
+
+	.btnLink:hover { filter: brightness(85%); z-index: 9999; }
+
+	.submenuContainer {
+		position: relative;
+	}
+
+	.btnSubmenu {
+		position: absolute;
+		display: none;
+		// visibility: hidden;
+		height: 0px;
+		overflow: hidden;
+		bottom: 0;
+		right: -153px;
+		width: 150px;
+		margin-block-end: 0;
+		transition: all 1s ease-in;
+		z-index: 9999;
+	}
+
+	.submenuItem {
+		display: block;
+		padding: 5px;
+		border: 1px solid black;
+		filter: brightness(100%);
+
+		a {
+			text-decoration: none;
+		}
+
+		.itemLabel {
+			font-weight: $ms-font-weight-semibold;
+			font-size: $ms-font-size-m;
+			vertical-align: middle;
+			text-align: center;
+		}
+	}
+
+	.submenuItem:hover { filter: brightness(85%); z-index: 9999; }
+
+	.btnLinkMenu:hover ul {
+		display: block;
+		// visibility: visible;
+		height: auto;
 	}
 
 }
