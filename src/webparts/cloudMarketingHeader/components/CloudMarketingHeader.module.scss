@@ -235,6 +235,7 @@
 	}
 
 	.btnLink:hover { filter: brightness(85%); z-index: 9999; }
+	.btnLink:focus-visible { filter: brightness(85%); border: 2px solid black; z-index: 9999; }
 
 	.submenuContainer {
 		position: relative;

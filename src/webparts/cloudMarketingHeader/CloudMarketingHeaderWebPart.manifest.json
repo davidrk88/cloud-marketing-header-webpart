@@ -27,6 +27,7 @@
       "descriptionAT": "Targetted description here...",
       "gradientcolor": "bgColorBlack",
       "linktxtcolor": "txtColorBlack",
+      "titlecolor": "#ffffff",
       "textcolor": "#ffffff",
       "btncolor": "#ffffff",
       "showconfidential": true,

@@ -52,6 +52,7 @@ export interface ICloudMarketingHeaderWebPartProps {
 	title: string;
 	description: string;
 	descriptionAT: string;
+	titlecolor: string;
 	textcolor: string;
 	btncolor: string;
 	linktxtcolor: string;
@@ -106,6 +107,7 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 				title: this.properties.title,
 				description: this.properties.description,
 				descriptionat: this.properties.descriptionAT,
+				titlecolor: this.properties.titlecolor,
 				textcolor: this.properties.textcolor,
 				btncolor: this.properties.btncolor,
 				linktxtcolor: this.properties.linktxtcolor,
@@ -353,6 +355,19 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 								PropertyPaneTextField('title', {
 									label: strings.TitleFieldLabel
 								}),
+								PropertyFieldColorPicker('titlecolor', {
+									label: strings.TitleColorFieldLabel,
+									selectedColor: this.properties.titlecolor,
+									onPropertyChange: this.onPropertyPaneFieldChanged,
+									properties: this.properties,
+									disabled: false,
+									// debounce: 1000,
+									isHidden: false,
+									alphaSliderHidden: false,
+									style: PropertyFieldColorPickerStyle.Inline,
+									iconName: 'Color',
+									key: 'titlecolorFieldId'
+								}),
 								PropertyPaneTextField('description', {
 									label: strings.DescriptionFieldLabel,
 									multiline: true
@@ -384,6 +399,19 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 									onGetErrorMessage: null,
 									deferredValidationTime: 0,
 									key: 'peopleFieldId'
+								}),
+								PropertyFieldColorPicker('textcolor', {
+									label: strings.TextColorFieldLabel,
+									selectedColor: this.properties.textcolor,
+									onPropertyChange: this.onPropertyPaneFieldChanged,
+									properties: this.properties,
+									disabled: false,
+									// debounce: 1000,
+									isHidden: false,
+									alphaSliderHidden: false,
+									style: PropertyFieldColorPickerStyle.Inline,
+									iconName: 'Color',
+									key: 'textcolorFieldId'
 								})
 							]
 						}
@@ -492,19 +520,6 @@ export default class CloudMarketingHeaderWebPart extends BaseClientSideWebPart<I
 										}
 									],
 									disabled: false
-								}),
-								PropertyFieldColorPicker('textcolor', {
-									label: strings.TextColorFieldLabel,
-									selectedColor: this.properties.textcolor,
-									onPropertyChange: this.onPropertyPaneFieldChanged,
-									properties: this.properties,
-									disabled: false,
-									// debounce: 1000,
-									isHidden: false,
-									alphaSliderHidden: false,
-									style: PropertyFieldColorPickerStyle.Inline,
-									iconName: 'Color',
-									key: 'textcolorFieldId'
 								}),
 								PropertyFieldColorPicker('btncolor', {
 									label: strings.BTNColorFieldLabel,

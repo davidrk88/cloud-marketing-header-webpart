@@ -15,6 +15,7 @@ declare interface ICloudMarketingHeaderWebPartStrings {
 	DescriptionPickerLabel: string;
 	DescriptionATFieldLabel: string;
 	DescriptionATPickerLabel: string;
+	TitleColorFieldLabel: string;
 	TextColorFieldLabel: string;
 	BTNColorFieldLabel: string;
 	LinkTxtColorFieldLabel: string;

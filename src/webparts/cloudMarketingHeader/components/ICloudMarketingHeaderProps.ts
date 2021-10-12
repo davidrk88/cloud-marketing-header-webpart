@@ -6,6 +6,7 @@ export interface ICloudMarketingHeaderProps extends ITargetAudienceProps {
 	title: string;
 	description: string;
 	descriptionat: string;
+	titlecolor: string;
 	textcolor: string;
 	btncolor: string;
 	linktxtcolor: string;

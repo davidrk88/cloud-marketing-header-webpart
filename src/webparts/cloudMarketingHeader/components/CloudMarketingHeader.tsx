@@ -69,7 +69,7 @@ export default class CloudMarketingHeader extends React.Component<ICloudMarketin
 							&nbsp;<a href="https://microsoft.sharepoint.com/sites/CELAWeb-Compliance/SitePages/confidential-information.aspx" target="_blank" data-interception="off">confidential information policy</a>
 						</div>
 					</div>
-					<div className={ styles.confidentialBarContentToggle } onClick={ () => this.setState({ confidentialBarToggle: false }) }>X</div>
+					<div className={ styles.confidentialBarContentToggle } onClick={ () => this.setState({ confidentialBarToggle: false }) } tabIndex={0}>X</div>
 				</div>
 			);
 		};
@@ -165,7 +165,7 @@ export default class CloudMarketingHeader extends React.Component<ICloudMarketin
 			return (
 				<div>
 					<div className={ styles.content }>
-						<div className={ `${styles.title} ${styles.textLeft}` } style={{ color: `${this.props.textcolor}` }}>{ this.props.title }</div>
+						<h1 className={ `${styles.title} ${styles.textLeft}` } style={{ color: `${this.props.titlecolor}` }}>{ this.props.title }</h1>
 						<TargetAudience pageContext={ this.props.pageContext } audienceTargets={ this.props.audienceTargetsDesc }>
 							<p className={ `${styles.description} ${styles.textLeft}` } style={{ color: `${this.props.textcolor}` }}>{ this.props.description }</p>
 						</TargetAudience>
